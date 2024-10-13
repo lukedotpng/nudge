@@ -69,6 +69,9 @@ int CreateFiles(char* file_path) {
         char* curr_substring = substring_arr[i];
         int curr_substring_len = strlen(curr_substring);
 
+        char tmp_mode = mode;
+        if(i == substring_cnt - 1) mode = 'n'; // Turn off safe mode for last item so it will make non-existent directory
+
         if(curr_substring[curr_substring_len - 1] == '/') {
             if(DirectoryExists(curr_file_path) != 0) {
                 if(mode == 's') {
@@ -81,6 +84,8 @@ int CreateFiles(char* file_path) {
             FILE* new_file = fopen(curr_file_path, "a");
             fclose(new_file);
         }
+
+        mode = tmp_mode;
     }
 
     return 0;
@@ -97,8 +102,6 @@ int main(int argv, char* argc[]) {
             mode = 's';
             continue;
         }
-
-        if(i == argv - 1) mode = 'n'; // Turn off safe mode for last item so it will make non-existent directory
 
         CreateFiles(argc[i]);
     }
